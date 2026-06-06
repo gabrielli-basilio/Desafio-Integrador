@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class ConexaoBanco {
 
     private static final String URL =
-        "jdbc:mysql://monorail.proxy.rlwy.net:36115/railway?useUnicode=true&characterEncoding=UTF-8";
+        "jdbc:mysql://monorail.proxy.rlwy.net:36115/gerenciamento_pedidos?useUnicode=true&characterEncoding=UTF-8";
     private static final String USER = "root";
     private static final String PASS = "456123";
 
