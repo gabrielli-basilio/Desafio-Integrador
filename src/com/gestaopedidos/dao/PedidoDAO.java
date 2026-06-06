@@ -44,6 +44,28 @@ public class PedidoDAO {
         return pedidos;
     }
 
+    public Pedido buscarPorId(int id) {
+        String sql = "SELECT * FROM pedido WHERE id_pedido = ?";
+        try (Connection conn = ConexaoBanco.conectar();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Pedido(
+                        rs.getInt("id_pedido"),
+                        rs.getInt("id_cliente"),
+                        StatusPedido.valueOf(rs.getString("status").toUpperCase()),
+                        rs.getTimestamp("data_hora").toLocalDateTime()
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new ValidacaoException("Erro ao buscar pedido: " + e.getMessage());
+        }
+        return null;
+    }
+
     public void atualizarStatus(int idPedido, StatusPedido status, Connection conn) throws SQLException {
         String sql = "UPDATE pedido SET status = ? WHERE id_pedido = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -54,18 +76,18 @@ public class PedidoDAO {
     }
 
     public Pedido buscarPedidoNaFila(Connection conn) throws SQLException {
-    String sql = "SELECT * FROM pedido WHERE status = 'FILA' LIMIT 1 FOR UPDATE";
-    try (PreparedStatement stmt = conn.prepareStatement(sql);
-        ResultSet rs = stmt.executeQuery()) {
-        if (rs.next()) {
-            return new Pedido(
-                rs.getInt("id_pedido"),
-                rs.getInt("id_cliente"),
-                StatusPedido.valueOf(rs.getString("status").toUpperCase()),
-                rs.getTimestamp("data_hora").toLocalDateTime()
-            );
+        String sql = "SELECT * FROM pedido WHERE status = 'FILA' LIMIT 1 FOR UPDATE";
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return new Pedido(
+                    rs.getInt("id_pedido"),
+                    rs.getInt("id_cliente"),
+                    StatusPedido.valueOf(rs.getString("status").toUpperCase()),
+                    rs.getTimestamp("data_hora").toLocalDateTime()
+                );
+            }
         }
+        return null;
     }
-    return null;
-}
 }

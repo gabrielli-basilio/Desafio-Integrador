@@ -3,7 +3,8 @@ package com.gestaopedidos.dao;
 import com.gestaopedidos.exception.ValidacaoException;
 import com.gestaopedidos.infra.ConexaoBanco;
 import com.gestaopedidos.model.ItemPedido;
-
+import com.gestaopedidos.model.Pedido;
+import com.gestaopedidos.model.enums.StatusPedido;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,4 +45,25 @@ public class ItemPedidoDAO {
         }
         return itens;
     }
+    public Pedido buscarPorId(int id) {
+    String sql = "SELECT * FROM pedido WHERE id_pedido = ?";
+    try (Connection conn = ConexaoBanco.conectar();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, id);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return new Pedido(
+                    rs.getInt("id_pedido"),
+                    rs.getInt("id_cliente"),
+                    StatusPedido.valueOf(rs.getString("status").toUpperCase()),
+                    rs.getTimestamp("data_hora").toLocalDateTime()
+                );
+            }
+        }
+    } catch (SQLException e) {
+        throw new ValidacaoException("Erro ao buscar pedido: " + e.getMessage());
+    }
+    return null;
+}
 }
