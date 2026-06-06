@@ -8,38 +8,42 @@ public class MenuPrincipal {
     private final MenuCliente menuCliente;
     private final MenuProduto menuProduto;
     private final MenuPedido menuPedido;
+    private final MenuRelatorio menuRelatorio;
 
     public MenuPrincipal(Scanner scanner) {
         this.scanner = scanner;
         this.menuCliente = new MenuCliente(scanner);
         this.menuProduto = new MenuProduto(scanner);
         this.menuPedido = new MenuPedido(scanner);
+        this.menuRelatorio = new MenuRelatorio(scanner);
     }
 
     public void exibir() {
-    int opcao = -1;
-    while (opcao != 0) {
-        System.out.println("\n=== SISTEMA DE GESTÃO DE PEDIDOS ===");
-        System.out.println("1 - Clientes");
-        System.out.println("2 - Produtos");
-        System.out.println("3 - Pedidos");
-        System.out.println("0 - Sair");
-        System.out.print("Opção: ");
+        int opcao = -1;
+        while (opcao != 0) {
+            System.out.println("\n=== SISTEMA DE GESTÃO DE PEDIDOS ===");
+            System.out.println("1 - Clientes");
+            System.out.println("2 - Produtos");
+            System.out.println("3 - Pedidos");
+            System.out.println("4 - Relatórios");
+            System.out.println("0 - Sair");
+            System.out.print("Opção: ");
 
-        try {
-            opcao = Integer.parseInt(scanner.nextLine().trim());
-        } catch (NumberFormatException e) {
-            System.out.println("Digite um número válido!");
-            continue;
-        }
+            try {
+                opcao = Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Digite um número válido!");
+                continue;
+            }
 
-        switch (opcao) {
-            case 1 -> menuCliente.exibir();
-            case 2 -> menuProduto.exibir();
-            case 3 -> menuPedido.exibir();
-            case 0 -> System.out.println("Encerrando sistema...");
-            default -> System.out.println("Opção inválida!");
+            switch (opcao) {
+                case 1 -> menuCliente.exibir();
+                case 2 -> menuProduto.exibir();
+                case 3 -> menuPedido.exibir();
+                case 4 -> menuRelatorio.exibir();
+                case 0 -> System.out.println("Encerrando sistema...");
+                default -> System.out.println("Opção inválida!");
+            }
         }
     }
-}
 }
