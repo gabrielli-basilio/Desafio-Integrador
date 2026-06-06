@@ -4,7 +4,6 @@ import com.gestaopedidos.exception.EstoqueInsuficienteException;
 import com.gestaopedidos.exception.ValidacaoException;
 import com.gestaopedidos.model.Pedido;
 import com.gestaopedidos.service.PedidoService;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +75,10 @@ public class MenuPedido {
                     quantidade = Integer.parseInt(scanner.nextLine().trim());
                 } catch (NumberFormatException e) {
                     System.out.println("Erro: Quantidade inválida!");
+                    return;
+                }
+                if (quantidade <= 0) {
+                    System.out.println("Erro: Quantidade deve ser positiva!");
                     return;
                 }
 

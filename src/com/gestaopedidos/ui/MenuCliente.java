@@ -63,8 +63,8 @@ public class MenuCliente {
             System.out.print("CPF (só números): ");
             String cpf = scanner.nextLine();
 
-            if (cpf.trim().length() != 11) {
-                System.out.println("Erro: CPF deve ter exatamente 11 dígitos!");
+            if (cpf.trim().length() != 11 || !cpf.trim().matches("\\d+")) {
+                System.out.println("Erro: CPF deve ter exatamente 11 dígitos numéricos!");
                 return;
             }
 

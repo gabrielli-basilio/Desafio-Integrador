@@ -61,6 +61,10 @@ public class MenuProduto {
                 System.out.println("Erro: Preço inválido!");
                 return;
             }
+            if (preco <= 0) {
+                System.out.println("Erro: Preço deve ser positivo!");
+                return;
+            }
 
             System.out.print("Quantidade em estoque: ");
             int estoque;
@@ -68,6 +72,10 @@ public class MenuProduto {
                 estoque = Integer.parseInt(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
                 System.out.println("Erro: Quantidade inválida!");
+                return;
+            }
+            if (estoque < 0) {
+                System.out.println("Erro: Estoque não pode ser negativo!");
                 return;
             }
 
@@ -119,6 +127,10 @@ public class MenuProduto {
                 quantidade = Integer.parseInt(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
                 System.out.println("Erro: Quantidade inválida!");
+                return;
+            }
+            if (quantidade <= 0) {
+                System.out.println("Erro: Quantidade deve ser positiva!");
                 return;
             }
 
