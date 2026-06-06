@@ -13,8 +13,8 @@ public class ClienteService {
         if (nome == null || nome.trim().isEmpty()) {
             throw new ValidacaoException("Nome não pode ser vazio!");
         }
-        if (nome == null || nome.trim().isEmpty() || nome.matches(".*[!@#$%^&*()_+=\\[\\]{}|;:',.<>?/\\\\\"]+.*")) {
-            throw new ValidacaoException("Nome inválido!");
+        if (!nome.matches("[\\p{L} ]+")) {
+            throw new ValidacaoException("Nome deve conter apenas letras!");
         }
         if (cpf == null || cpf.trim().length() != 11) {
             throw new ValidacaoException("CPF deve ter 11 dígitos!");
@@ -26,6 +26,11 @@ public class ClienteService {
         Cliente cliente = new Cliente(0, nome, cpf, email);
         clienteDAO.salvar(cliente);
         System.out.println("Cliente cadastrado com sucesso!");
+    }
+
+    public void deletar(int id) {
+        clienteDAO.deletar(id);
+        System.out.println("Cliente removido com sucesso!");
     }
 
     public List<Cliente> listarTodos() {

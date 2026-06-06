@@ -21,6 +21,7 @@ public class MenuCliente {
             System.out.println("\n=== MENU CLIENTE ===");
             System.out.println("1 - Cadastrar Cliente");
             System.out.println("2 - Listar Clientes");
+            System.out.println("3 - Remover Cliente");
             System.out.println("0 - Voltar");
             System.out.print("Opção: ");
 
@@ -34,6 +35,7 @@ public class MenuCliente {
             switch (opcao) {
                 case 1 -> cadastrar();
                 case 2 -> listar();
+                case 3 -> remover();
                 case 0 -> System.out.println("Voltando...");
                 default -> System.out.println("Opção inválida!");
             }
@@ -70,6 +72,33 @@ public class MenuCliente {
             String email = scanner.nextLine();
 
             clienteService.cadastrar(nome, cpf, email);
+
+        } catch (ValidacaoException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+    }
+
+    private void remover() {
+        try {
+            listar();
+
+            System.out.print("ID do Cliente a remover: ");
+            int id;
+            try {
+                id = Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Erro: ID inválido!");
+                return;
+            }
+
+            System.out.print("Tem certeza? (s/n): ");
+            String confirmacao = scanner.nextLine();
+
+            if (confirmacao.equalsIgnoreCase("s")) {
+                clienteService.deletar(id);
+            } else {
+                System.out.println("Operação cancelada!");
+            }
 
         } catch (ValidacaoException e) {
             System.out.println("Erro: " + e.getMessage());

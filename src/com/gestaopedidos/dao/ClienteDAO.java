@@ -3,7 +3,6 @@ package com.gestaopedidos.dao;
 import com.gestaopedidos.exception.ValidacaoException;
 import com.gestaopedidos.infra.ConexaoBanco;
 import com.gestaopedidos.model.Cliente;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,7 @@ public class ClienteDAO {
     public void salvar(Cliente cliente) {
         String sql = "INSERT INTO cliente (nome, cpf, email) VALUES (?, ?, ?)";
         try (Connection conn = ConexaoBanco.conectar();
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, cliente.getNome());
             stmt.setString(2, cliente.getCpf());
@@ -25,11 +24,31 @@ public class ClienteDAO {
         }
     }
 
+    public void deletar(int id) {
+        String sql = "DELETE FROM cliente WHERE id_cliente = ?";
+        try (Connection conn = ConexaoBanco.conectar();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            int linhas = stmt.executeUpdate();
+            if (linhas == 0) {
+                throw new ValidacaoException("Cliente não encontrado!");
+            }
+
+        } catch (SQLException e) {
+            if (e.getMessage().contains("foreign key constraint")) {
+                throw new ValidacaoException("Cliente possui pedidos e não pode ser removido!");
+            }
+            throw new ValidacaoException("Erro ao deletar cliente: " + e.getMessage());
+        }
+    }
+
     public List<Cliente> listarTodos() {
         List<Cliente> clientes = new ArrayList<>();
         String sql = "SELECT * FROM cliente";
-        try (Connection conn = ConexaoBanco.conectar();PreparedStatement stmt = conn.prepareStatement(sql);
-        ResultSet rs = stmt.executeQuery()) {
+        try (Connection conn = ConexaoBanco.conectar();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 clientes.add(new Cliente(
@@ -48,7 +67,7 @@ public class ClienteDAO {
     public Cliente buscarPorId(int id) {
         String sql = "SELECT * FROM cliente WHERE id_cliente = ?";
         try (Connection conn = ConexaoBanco.conectar();
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
