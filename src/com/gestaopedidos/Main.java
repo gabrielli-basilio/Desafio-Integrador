@@ -2,7 +2,6 @@ package com.gestaopedidos;
 
 import com.gestaopedidos.thread.ProcessadorPedidos;
 import com.gestaopedidos.ui.MenuPrincipal;
-
 import java.util.Scanner;
 
 public class Main {

@@ -4,7 +4,6 @@ import com.gestaopedidos.exception.ValidacaoException;
 import com.gestaopedidos.model.Produto;
 import com.gestaopedidos.model.enums.Categoria;
 import com.gestaopedidos.service.ProdutoService;
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,15 +22,21 @@ public class MenuProduto {
             System.out.println("\n=== MENU PRODUTO ===");
             System.out.println("1 - Cadastrar Produto");
             System.out.println("2 - Listar Produtos");
+            System.out.println("3 - Atualizar Estoque");
             System.out.println("0 - Voltar");
             System.out.print("Opção: ");
 
-            opcao = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                opcao = Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Opção inválida! Tente novamente.");
+                continue;
+            }
 
             switch (opcao) {
                 case 1 -> cadastrar();
                 case 2 -> listar();
+                case 3 -> atualizarEstoque();
                 case 0 -> System.out.println("Voltando...");
                 default -> System.out.println("Opção inválida!");
             }
@@ -43,13 +48,28 @@ public class MenuProduto {
             System.out.print("Nome: ");
             String nome = scanner.nextLine();
 
+            if (nome == null || nome.trim().isEmpty()) {
+                System.out.println("Erro: Nome não pode ser vazio!");
+                return;
+            }
+
             System.out.print("Preço: ");
-            double preco = scanner.nextDouble();
-            scanner.nextLine();
+            double preco;
+            try {
+                preco = Double.parseDouble(scanner.nextLine().trim().replace(",", "."));
+            } catch (NumberFormatException e) {
+                System.out.println("Erro: Preço inválido!");
+                return;
+            }
 
             System.out.print("Quantidade em estoque: ");
-            int estoque = scanner.nextInt();
-            scanner.nextLine();
+            int estoque;
+            try {
+                estoque = Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Erro: Quantidade inválida!");
+                return;
+            }
 
             System.out.println("Categorias:");
             System.out.println("1 - LIVROS");
@@ -57,8 +77,13 @@ public class MenuProduto {
             System.out.println("3 - ROUPAS");
             System.out.println("4 - CALCADOS");
             System.out.print("Escolha: ");
-            int opcaoCategoria = scanner.nextInt();
-            scanner.nextLine();
+            int opcaoCategoria;
+            try {
+                opcaoCategoria = Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Erro: Categoria inválida!");
+                return;
+            }
 
             Categoria categoria = switch (opcaoCategoria) {
                 case 1 -> Categoria.LIVROS;
@@ -69,6 +94,35 @@ public class MenuProduto {
             };
 
             produtoService.cadastrar(nome, preco, estoque, categoria);
+
+        } catch (ValidacaoException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+    }
+
+    private void atualizarEstoque() {
+        try {
+            listar();
+
+            System.out.print("ID do Produto: ");
+            int id;
+            try {
+                id = Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Erro: ID inválido!");
+                return;
+            }
+
+            System.out.print("Quantidade a adicionar: ");
+            int quantidade;
+            try {
+                quantidade = Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Erro: Quantidade inválida!");
+                return;
+            }
+
+            produtoService.atualizarEstoque(id, quantidade);
 
         } catch (ValidacaoException e) {
             System.out.println("Erro: " + e.getMessage());

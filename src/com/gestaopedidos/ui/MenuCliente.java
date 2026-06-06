@@ -3,7 +3,6 @@ package com.gestaopedidos.ui;
 import com.gestaopedidos.exception.ValidacaoException;
 import com.gestaopedidos.model.Cliente;
 import com.gestaopedidos.service.ClienteService;
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -25,8 +24,12 @@ public class MenuCliente {
             System.out.println("0 - Voltar");
             System.out.print("Opção: ");
 
-            opcao = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                opcao = Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Opção inválida! Tente novamente.");
+                continue;
+            }
 
             switch (opcao) {
                 case 1 -> cadastrar();
@@ -42,8 +45,26 @@ public class MenuCliente {
             System.out.print("Nome: ");
             String nome = scanner.nextLine();
 
+            if (nome == null || nome.trim().isEmpty()) {
+                System.out.println("Erro: Nome não pode ser vazio!");
+                return;
+            }
+            if (nome.matches(".*\\d+.*")) {
+                System.out.println("Erro: Nome não pode conter números!");
+                return;
+            }
+            if (nome.matches(".*[!@#$%^&*()_+=\\[\\]{}|;:',.<>?/\\\\\"]+.*")) {
+                System.out.println("Erro: Nome não pode conter símbolos!");
+                return;
+            }
+
             System.out.print("CPF (só números): ");
             String cpf = scanner.nextLine();
+
+            if (cpf.trim().length() != 11) {
+                System.out.println("Erro: CPF deve ter exatamente 11 dígitos!");
+                return;
+            }
 
             System.out.print("Email: ");
             String email = scanner.nextLine();

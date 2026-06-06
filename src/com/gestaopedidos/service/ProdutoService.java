@@ -4,7 +4,6 @@ import com.gestaopedidos.dao.ProdutoDAO;
 import com.gestaopedidos.exception.ValidacaoException;
 import com.gestaopedidos.model.Produto;
 import com.gestaopedidos.model.enums.Categoria;
-
 import java.util.List;
 
 public class ProdutoService {
@@ -25,6 +24,14 @@ public class ProdutoService {
         Produto produto = new Produto(0, nome, preco, quantEstoque, categoria);
         produtoDAO.salvar(produto);
         System.out.println("Produto cadastrado com sucesso!");
+    }
+
+    public void atualizarEstoque(int id, int quantidade) {
+        if (quantidade <= 0) {
+            throw new ValidacaoException("Quantidade deve ser positiva!");
+        }
+        produtoDAO.adicionarEstoque(id, quantidade);
+        System.out.println("Estoque atualizado com sucesso!");
     }
 
     public List<Produto> listarTodos() {

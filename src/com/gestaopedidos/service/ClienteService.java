@@ -3,7 +3,6 @@ package com.gestaopedidos.service;
 import com.gestaopedidos.dao.ClienteDAO;
 import com.gestaopedidos.exception.ValidacaoException;
 import com.gestaopedidos.model.Cliente;
-
 import java.util.List;
 
 public class ClienteService {
@@ -13,6 +12,9 @@ public class ClienteService {
     public void cadastrar(String nome, String cpf, String email) {
         if (nome == null || nome.trim().isEmpty()) {
             throw new ValidacaoException("Nome não pode ser vazio!");
+        }
+        if (nome == null || nome.trim().isEmpty() || nome.matches(".*[!@#$%^&*()_+=\\[\\]{}|;:',.<>?/\\\\\"]+.*")) {
+            throw new ValidacaoException("Nome inválido!");
         }
         if (cpf == null || cpf.trim().length() != 11) {
             throw new ValidacaoException("CPF deve ter 11 dígitos!");

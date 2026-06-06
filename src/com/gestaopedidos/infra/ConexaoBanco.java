@@ -1,4 +1,5 @@
 package com.gestaopedidos.infra;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -6,7 +7,7 @@ import java.sql.SQLException;
 public class ConexaoBanco {
 
     private static final String URL =
-        "jdbc:mysql://localhost:3306/gerenciamento_pedidos";
+        "jdbc:mysql://localhost:3306/gerenciamento_pedidos?useUnicode=true&characterEncoding=UTF-8";
     private static final String USER = "root";
     private static final String PASS = "";
 

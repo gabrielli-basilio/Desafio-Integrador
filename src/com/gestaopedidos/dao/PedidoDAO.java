@@ -4,7 +4,6 @@ import com.gestaopedidos.exception.ValidacaoException;
 import com.gestaopedidos.infra.ConexaoBanco;
 import com.gestaopedidos.model.Pedido;
 import com.gestaopedidos.model.enums.StatusPedido;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,18 +54,18 @@ public class PedidoDAO {
     }
 
     public Pedido buscarPedidoNaFila(Connection conn) throws SQLException {
-        String sql = "SELECT * FROM pedido WHERE status = 'FILA' LIMIT 1 FOR UPDATE SKIP LOCKED";
-        try (PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                return new Pedido(
-                    rs.getInt("id_pedido"),
-                    rs.getInt("id_cliente"),
-                    StatusPedido.valueOf(rs.getString("status").toUpperCase()),
-                    rs.getTimestamp("data_hora").toLocalDateTime()
-                );
-            }
+    String sql = "SELECT * FROM pedido WHERE status = 'FILA' LIMIT 1 FOR UPDATE";
+    try (PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery()) {
+        if (rs.next()) {
+            return new Pedido(
+                rs.getInt("id_pedido"),
+                rs.getInt("id_cliente"),
+                StatusPedido.valueOf(rs.getString("status").toUpperCase()),
+                rs.getTimestamp("data_hora").toLocalDateTime()
+            );
         }
-        return null;
     }
+    return null;
+}
 }
